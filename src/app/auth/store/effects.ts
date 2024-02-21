@@ -40,4 +40,64 @@ export const redirectAfterRegisterEffect = createEffect((
                 router.navigateByUrl('/')
             })
         )
-    },{functional:true, dispatch:false})
+},{functional:true, dispatch:false})
+
+export const loginEffect = createEffect((
+        actions$ = inject(Actions),
+        authService = inject(AuthService),
+        persistanceService= inject(PersistanceService)
+    )=>{
+        return actions$.pipe(
+                                ofType(authActions.login),
+                                switchMap(({request})=>{
+                                    return authService.login(request).pipe(
+                                        map((currentUser:CurrentUserInterface)=>{
+                                            //window.localStorage.setItem('acessToken',currentUser.token);//this is an alternate way
+                                            persistanceService.set('acessToken',currentUser.token)
+                                            return authActions.loginSuccess({currentUser})
+                                        }),
+                                        catchError((err:HttpErrorResponse)=>{
+                                            return of(authActions.loginFailure({errors:err.error.errors}))
+                                        })
+                                    )
+                                }
+                            )
+        )
+},{functional:true})
+
+export const redirectAfterLoginEffect = createEffect((
+    actions$ = inject(Actions),
+    router = inject(Router))=>{
+        return actions$.pipe(
+            ofType(authActions.loginSuccess),
+            tap(()=>{
+                router.navigateByUrl('/')
+            })
+        )
+},{functional:true, dispatch:false})
+
+export const getCurrentUserEffect = createEffect((
+    actions$ = inject(Actions),
+    authService = inject(AuthService),
+    persistanceService= inject(PersistanceService)
+)=>{
+    return actions$.pipe(
+                            ofType(authActions.getCurrentUser),
+                            switchMap(()=>{
+                                const token= persistanceService.get('accessToken');
+                                if (!token){
+                                    return of(authActions.getCurrentUserFailure())
+                                }
+                                return authService.getCurrentUser().pipe(
+                                    map((currentUser:CurrentUserInterface)=>{
+                                        return authActions.getCurrentUserSuccess({currentUser})
+                                    }),
+                                    catchError(()=>{
+                                        return of(authActions.getCurrentUserFailure())
+                                    })
+                                )
+                            }
+                        )
+    )
+},{functional:true})
+    
