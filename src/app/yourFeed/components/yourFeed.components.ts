@@ -5,11 +5,11 @@ import { PopularTagsComponent } from "../../shared/components/popularTags/popula
 import { FeedTogglerComponent } from "../../shared/components/feedToggler/feedToggler.component";
 
 @Component({
-    selector:'mc-global-feed',
-    templateUrl: './globalFeed.component.html',
+    selector:'mc-your-feed',
+    templateUrl: './yourFeed.component.html',
     standalone: true,
     imports : [FeedComponent, BannerComponent, PopularTagsComponent, FeedTogglerComponent]
 })
-export class GlobalFeedComponent{
-    apiUrl = '/articles'
+export class YourFeedComponent{
+    apiUrl = '/articles/feed'
 }
