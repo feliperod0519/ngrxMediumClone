@@ -27,9 +27,29 @@ export const appRoutes: Routes = [
       import('../app/tagFeed/tagFeed.routes').then((m)=>m.routes)
   },
   {
+    path: 'articles/new',
+    loadChildren: () =>
+      import('../app/createArticle/createArticle.routes').then((m)=>m.routes)
+  },
+  {
     path: 'articles/:slug',
     loadChildren: () =>
       import('../app/article/article.routes').then((m)=>m.routes)
-  }
+  },
+  {
+    path: 'settings',
+    loadChildren: () =>
+      import('../app/settings/settings.routes').then((m) => m.routes),
+  },
+  {
+    path: 'profiles/:slug',
+    loadChildren: () =>
+      import('../app/userProfile/userProfile.routes').then((m) => m.routes),
+  },
+  {
+    path: 'profiles/:slug/favorites',
+    loadChildren: () =>
+      import('../app/userProfile/userProfile.routes').then((m) => m.routes),
+  },
 
 ];
