@@ -25,6 +25,11 @@ export const appRoutes: Routes = [
     path: 'tags/:slug',
     loadChildren: () =>
       import('../app/tagFeed/tagFeed.routes').then((m)=>m.routes)
+  },
+  {
+    path: 'articles/:slug',
+    loadChildren: () =>
+      import('../app/article/article.routes').then((m)=>m.routes)
   }
 
 ];
